@@ -1,4 +1,4 @@
-module github.com/pragkent/alidns-webhook
+module github.com/dianplus/alidns-webhook
 
 go 1.17
 
