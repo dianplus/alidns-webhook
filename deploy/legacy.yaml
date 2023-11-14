@@ -17,11 +17,11 @@ metadata:
     app: alidns-webhook
 rules:
   - apiGroups:
-      - ''
+      - ""
     resources:
-      - 'secrets'
+      - "secrets"
     verbs:
-      - 'get'
+      - "get"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -91,9 +91,9 @@ rules:
   - apiGroups:
       - acme.yourcompany.com
     resources:
-      - '*'
+      - "*"
     verbs:
-      - 'create'
+      - "create"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -140,7 +140,7 @@ metadata:
   labels:
     app: alidns-webhook
 spec:
-  replicas: 
+  replicas:
   selector:
     matchLabels:
       app: alidns-webhook
@@ -178,9 +178,8 @@ spec:
             - name: certs
               mountPath: /tls
               readOnly: true
-          resources:
-            {}
-            
+          resources: {}
+
       volumes:
         - name: certs
           secret:
@@ -207,7 +206,7 @@ spec:
 ---
 # Create a selfsigned Issuer, in order to create a root CA certificate for
 # signing webhook serving certificates
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: alidns-webhook-selfsign
@@ -218,9 +217,8 @@ spec:
   selfSigned: {}
 
 ---
-
 # Generate a CA Certificate used to sign certificates for the webhook
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: alidns-webhook-ca
@@ -236,9 +234,8 @@ spec:
   isCA: true
 
 ---
-
 # Create an Issuer that uses the above generated CA certificate to issue certs
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: alidns-webhook-ca
@@ -250,9 +247,8 @@ spec:
     secretName: alidns-webhook-ca
 
 ---
-
 # Finally, generate a serving certificate for the webhook to use
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: alidns-webhook-webhook-tls
@@ -265,7 +261,7 @@ spec:
   issuerRef:
     name: alidns-webhook-ca
   dnsNames:
-  - alidns-webhook
-  - alidns-webhook.cert-manager
-  - alidns-webhook.cert-manager.svc
-  - alidns-webhook.cert-manager.svc.cluster.local
+    - alidns-webhook
+    - alidns-webhook.cert-manager
+    - alidns-webhook.cert-manager.svc
+    - alidns-webhook.cert-manager.svc.cluster.local

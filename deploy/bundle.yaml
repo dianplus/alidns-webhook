@@ -17,11 +17,11 @@ metadata:
     app: alidns-webhook
 rules:
   - apiGroups:
-      - ''
+      - ""
     resources:
-      - 'secrets'
+      - "secrets"
     verbs:
-      - 'get'
+      - "get"
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -34,11 +34,11 @@ rules:
   - apiGroups:
       - "flowcontrol.apiserver.k8s.io"
     resources:
-      - 'prioritylevelconfigurations'
-      - 'flowschemas'
+      - "prioritylevelconfigurations"
+      - "flowschemas"
     verbs:
-      - 'list'
-      - 'watch'
+      - "list"
+      - "watch"
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -126,9 +126,9 @@ rules:
   - apiGroups:
       - acme.yourcompany.com
     resources:
-      - '*'
+      - "*"
     verbs:
-      - 'create'
+      - "create"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -213,8 +213,7 @@ spec:
             - name: certs
               mountPath: /tls
               readOnly: true
-          resources:
-            {}
+          resources: {}
 
       volumes:
         - name: certs
@@ -253,7 +252,6 @@ spec:
   selfSigned: {}
 
 ---
-
 # Generate a CA Certificate used to sign certificates for the webhook
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -271,7 +269,6 @@ spec:
   isCA: true
 
 ---
-
 # Create an Issuer that uses the above generated CA certificate to issue certs
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -285,7 +282,6 @@ spec:
     secretName: alidns-webhook-ca
 
 ---
-
 # Finally, generate a serving certificate for the webhook to use
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -300,7 +296,7 @@ spec:
   issuerRef:
     name: alidns-webhook-ca
   dnsNames:
-  - alidns-webhook
-  - alidns-webhook.cert-manager
-  - alidns-webhook.cert-manager.svc
-  - alidns-webhook.cert-manager.svc.cluster.local
+    - alidns-webhook
+    - alidns-webhook.cert-manager
+    - alidns-webhook.cert-manager.svc
+    - alidns-webhook.cert-manager.svc.cluster.local
